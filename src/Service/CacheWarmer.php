@@ -192,16 +192,16 @@ class CacheWarmer {
       $cookies['auth_cache_warmer_uid'] = $url->getAccountId();
       $cookies['auth_cache_warmer_id'] = $this->sessionId;
       $cookieJar = CookieJar::fromArray($cookies, parse_url($url->toString(), PHP_URL_HOST));
-      $parameters = [
+      $options = [
         'verify' => FALSE,
         'timeout' => 120,
       ];
-      $parameters = array_merge($parameters, $url->getParameters());
-      $parameters['cookies'] = $cookieJar;
+      $options = array_merge($options, $url->getHttpOptions());
+      $options['cookies'] = $cookieJar;
       $promise = $this->httpClient->requestAsync(
         'GET',
         $url->toString(FALSE),
-        $parameters
+        $options
         );
     }
     catch (\Exception $e) {
