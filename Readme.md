@@ -1,5 +1,6 @@
 # Authenticated cache warmer
-This module allows to warm cache on routes that need authentication. It achieves this by impersonating a user in an EventSubscriber using the `account_switcher` service.
+This module allows to warm cache on routes that need authentication. It achieves this by impersonating a user in an EventSubscriber using the `account_switcher` service and a state key to authenticate the warming requests (see Security).
+
 
 ## Usage
 The module only provides the API to create your own cache warmer service. You need to implement your own drush command or cron job to actually run the cache warming.
@@ -39,3 +40,8 @@ $cacheWarmer->warm();
 ## Tips on CacheWarmerUrl
 - CacheWarmerUrl extends Drupal/Core/Url, so you can use all the `from*` methods. You then need to set the user account using `setAccountId()`.
 - You can pass options to the GuzzleHttpClient used to do the call using `setHttpOptions()` or via the fourth argument on the create method. See `GuzzleHttp\ClientInterface::requestAsync` for details.
+
+## Security
+The requests are secured by generating and storing a random key on starting the warming, which is then passed along as a cookie value with the request. The EventSubscriber checks if the key is in Drupal's state and is active.
+
+This means the calling client needs to run with the same Drupal environment/db.
