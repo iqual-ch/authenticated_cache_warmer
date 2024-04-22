@@ -1,0 +1,13 @@
+
+authenticated_cache_warmer.node:
+  path: "/authenticated_cache_warmer/{node}"
+  defaults:
+    _controller: '\Drupal\authenticated_cache_warmer\Controller\CacheWarmerNodeController::view'
+    _title_callback: '\Drupal\authenticated_cache_warmer\Controller\CacheWarmerNodeController::title'
+  options:
+    parameters:
+      node:
+        type: entity:node
+  requirements:
+    # Checks for permission directly.
+    _permission: "access content"

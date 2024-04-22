@@ -1,0 +1,6 @@
+name: Authenticated user cache warmer
+description: Authenticated user cache warmer
+package: Custom
+type: module
+core_version_requirement: ^10
+configure: authenticated_cache_warmer.admin.config

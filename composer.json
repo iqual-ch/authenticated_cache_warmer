@@ -1,0 +1,9 @@
+{
+  "name": "iqual/authenticated_cache_warmed",
+  "description": "A module to warm cache for endpoints that need authentication.",
+  "type": "drupal-custom-module",
+  "require": {
+    "php": "^8.1",
+    "drupal/core": "^10"
+  }
+}
