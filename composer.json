@@ -1,5 +1,5 @@
 {
-  "name": "iqual/authenticated_cache_warmed",
+  "name": "iqual/authenticated_cache_warmer",
   "description": "A module to warm cache for endpoints that need authentication.",
   "type": "drupal-custom-module",
   "require": {
