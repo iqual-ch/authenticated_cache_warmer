@@ -8,7 +8,7 @@ The module only provides the API to create your own cache warmer service. You ne
 To use the API, you need the following data:
 - The route you want to call (e.g. `entity.node.canonical`)
 - The entity ids to request
-- The user ids the impersonate
+- The user ids to impersonate
 - (Optional) Http options for the GuzzleHttpClient
 
 You then create one or more CacheWarmUrl and provide them to the `authenticated_cache_warmer.cache_warmer` service. The service will call all the provided urls with the corresponding user account, limited to 10 parallel calls.
