@@ -17,6 +17,13 @@ class CacheWarmerUrl extends Url {
   protected $accountId = 0;
 
   /**
+   * The parameters for the http call.
+   *
+   * @var array
+   */
+  protected $httpParameters = [];
+
+  /**
    * Create a new url from the given parameters.
    *
    * @param string $route_name
@@ -29,9 +36,10 @@ class CacheWarmerUrl extends Url {
    * @return CacheWarmerUrl
    *   The new url object.
    */
-  public static function create(string $route_name, array $route_parameters, int $account_id) : CacheWarmerUrl {
+  public static function create(string $route_name, array $route_parameters, int $account_id, array $http_parameters = []) : CacheWarmerUrl {
     $url = parent::fromRoute($route_name, $route_parameters);
     $url->setAccountId($account_id);
+    $url->setParameters($http_parameters);
     return $url;
   }
 
@@ -50,6 +58,26 @@ class CacheWarmerUrl extends Url {
    */
   public function getAccountId() {
     return $this->accountId;
+  }
+
+  /**
+   * Set additional parameters for the http client.
+   *
+   * @param array $http_parameters
+   *   The parameters.
+   */
+  public function setParameters($http_parameters) {
+    $this->httpParameters = $http_parameters;
+  }
+
+  /**
+   * Return the additional parameters for the http client.
+   *
+   * @return array
+   *   The parameters.
+   */
+  public function getParameters() {
+    return $this->httpParameters;
   }
 
 }

@@ -192,17 +192,16 @@ class CacheWarmer {
       $cookies['auth_cache_warmer_uid'] = $url->getAccountId();
       $cookies['auth_cache_warmer_id'] = $this->sessionId;
       $cookieJar = CookieJar::fromArray($cookies, parse_url($url->toString(), PHP_URL_HOST));
+      $parameters = [
+        'verify' => FALSE,
+        'timeout' => 120,
+      ];
+      $parameters = array_merge($parameters, $url->getParameters());
+      $parameters['cookies'] = $cookieJar;
       $promise = $this->httpClient->requestAsync(
         'GET',
         $url->toString(FALSE),
-        [
-          'cookies' => $cookieJar,
-          'verify' => FALSE,
-          'timeout' => 120,
-          'curl' => [
-            CURLOPT_CONNECT_TO => ['app.tg-sw-project.localdev.iqual.ch:443:host.docker.internal:443'],
-          ],
-        ]
+        $parameters
         );
     }
     catch (\Exception $e) {
