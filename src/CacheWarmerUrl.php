@@ -30,6 +30,8 @@ class CacheWarmerUrl extends Url {
    *   The route name.
    * @param array $route_parameters
    *   The route parameters.
+   * @param array $options
+   *   The options for the url.
    * @param int $account_id
    *   The account id.
    * @param array $http_options
@@ -38,8 +40,8 @@ class CacheWarmerUrl extends Url {
    * @return CacheWarmerUrl
    *   The new url object.
    */
-  public static function create(string $route_name, array $route_parameters, int $account_id, array $http_options = []) : CacheWarmerUrl {
-    $url = parent::fromRoute($route_name, $route_parameters);
+  public static function create(string $route_name, array $route_parameters, array $options, int $account_id, array $http_options = []) : CacheWarmerUrl {
+    $url = parent::fromRoute($route_name, $route_parameters, $options);
     $url->setAccountId($account_id);
     $url->setHttpOptions($http_options);
     return $url;
