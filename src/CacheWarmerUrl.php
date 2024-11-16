@@ -10,11 +10,18 @@ use Drupal\Core\Url;
 class CacheWarmerUrl extends Url {
 
   /**
-   * The id of the account to emulate.
+   * The uid of the user.
    *
    * @var int
    */
-  protected $accountId = 0;
+  protected $uid = 0;
+
+  /**
+   * The cookies to send with the request.
+   *
+   * @var array
+   */
+  protected $cookies = [];
 
   /**
    * The options for the http call.
@@ -32,36 +39,62 @@ class CacheWarmerUrl extends Url {
    *   The route parameters.
    * @param array $options
    *   The options for the url.
-   * @param int $account_id
-   *   The account id.
+   * @param array $cookies
+   *   The cookies to send with the request.
+   * @param int $uid
+   *   The uid of the user.
    * @param array $http_options
    *   The http options for the client.
    *
    * @return CacheWarmerUrl
    *   The new url object.
    */
-  public static function create(string $route_name, array $route_parameters, array $options, int $account_id, array $http_options = []) : CacheWarmerUrl {
+  public static function create(string $route_name, array $route_parameters, array $options, array $cookies, int $uid, array $http_options = []) : CacheWarmerUrl {
     $url = parent::fromRoute($route_name, $route_parameters, $options);
-    $url->setAccountId($account_id);
+    $url->setAccountId($uid);
+    $url->setCookies($cookies);
     $url->setHttpOptions($http_options);
     return $url;
   }
 
   /**
-   * Set the account id to emulate.
+   * Get the uid of the user.
    *
-   * @param int $id
-   *   The account id.
+   * @return int
+   *   The uid.
    */
-  public function setAccountId(int $id) {
-    $this->accountId = $id;
+  public function getAccountId() {
+    return $this->uid;
   }
 
   /**
-   * Get the account id.
+   * Set the uid of the user.
+   *
+   * @param int $uid
+   *   The uid.
    */
-  public function getAccountId() {
-    return $this->accountId;
+  public function setAccountId($uid) {
+    $this->uid = $uid;
+  }
+
+  /**
+   * Set the cookies to send with the request.
+   *
+   * @param array $cookies
+   *   The cookies.
+   */
+  public function setCookies($cookies) {
+    $this->cookies = $cookies;
+  }
+
+  /**
+   * Get the cookies to send with the request.
+   *
+   * @return array
+   *   The cookies.
+   */
+  public function getCookies() {
+    return $this->cookies;
   }
 
   /**
