@@ -136,9 +136,10 @@ class CacheWarmer {
   public function warm() {
     $this->sessionId = uniqid('authenticated_cache_warmer');
     $this->state->set($this->sessionId, $this->sessionId);
+    $total = count($this->urls);
     reset($this->urls);
     $promises = [];
-    for ($i = 0; $i < 10; $i++) {
+    for ($i = 0; $i < $total; $i++) {
       $promise = $this->warmCurrent();
       if (!$promise) {
         break;
@@ -148,7 +149,7 @@ class CacheWarmer {
     Utils::all($promises)->wait();
     Utils::all($promises)->then(function () {
       $this->state->delete($this->sessionId);
-    });
+    })->wait();
   }
 
   /**
