@@ -2,9 +2,9 @@
 
 namespace Drupal\authenticated_cache_warmer\Service;
 
-use Drupal\authenticated_cache_warmer\CacheWarmerUrl;
 use Drupal\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\authenticated_cache_warmer\CacheWarmerUrl;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Promise\Utils;
@@ -136,19 +136,19 @@ class CacheWarmer {
   public function warm() {
     $this->sessionId = uniqid('authenticated_cache_warmer');
     $this->state->set($this->sessionId, $this->sessionId);
+    $total = count($this->urls);
     reset($this->urls);
     $promises = [];
-    for ($i = 0; $i < 10; $i++) {
+    for ($i = 0; $i < $total; $i++) {
       $promise = $this->warmCurrent();
       if (!$promise) {
         break;
       }
       $promises[] = $promise;
     }
-    Utils::all($promises)->wait();
     Utils::all($promises)->then(function () {
       $this->state->delete($this->sessionId);
-    });
+    })->wait();
   }
 
   /**
@@ -191,6 +191,9 @@ class CacheWarmer {
       $cookies = [];
       $cookies['auth_cache_warmer_uid'] = $url->getAccountId();
       $cookies['auth_cache_warmer_id'] = $this->sessionId;
+      foreach ($url->getCookies() as $name => $value) {
+        $cookies[$name] = $value;
+      }
       $cookieJar = CookieJar::fromArray($cookies, parse_url($url->toString(), PHP_URL_HOST));
       $options = [
         'verify' => FALSE,
