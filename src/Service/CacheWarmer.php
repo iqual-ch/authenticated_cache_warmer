@@ -146,7 +146,6 @@ class CacheWarmer {
       }
       $promises[] = $promise;
     }
-    Utils::all($promises)->wait();
     Utils::all($promises)->then(function () {
       $this->state->delete($this->sessionId);
     })->wait();
