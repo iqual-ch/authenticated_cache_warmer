@@ -188,10 +188,14 @@ class CacheWarmer {
   protected function warmUrl(CacheWarmerUrl $url) {
     try {
       $url->setAbsolute(TRUE);
+      file_put_contents('public://cache_warm.log', "---------------" . PHP_EOL, FILE_APPEND);
+      file_put_contents('public://cache_warm.log', "Processing url " . $url->toString() . PHP_EOL, FILE_APPEND);
       $cookies = [];
       $cookies['auth_cache_warmer_uid'] = $url->getAccountId();
+      file_put_contents('public://cache_warm.log', "User id " . $url->getAccountId() . PHP_EOL, FILE_APPEND);
       $cookies['auth_cache_warmer_id'] = $this->sessionId;
       foreach ($url->getCookies() as $name => $value) {
+        file_put_contents('public://cache_warm.log', "with cookie " . $name . " " . $value . PHP_EOL, FILE_APPEND);
         $cookies[$name] = $value;
       }
       $cookieJar = CookieJar::fromArray($cookies, parse_url($url->toString(), PHP_URL_HOST));
@@ -208,6 +212,7 @@ class CacheWarmer {
         );
     }
     catch (\Exception $e) {
+      file_put_contents('public://cache_warm.log', "Failed url " . $url->toString() . PHP_EOL, FILE_APPEND);
       $this->fail($url);
     }
     return $promise;
