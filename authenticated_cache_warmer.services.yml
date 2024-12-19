@@ -2,8 +2,3 @@ services:
   authenticated_cache_warmer.cache_warmer:
     class: \Drupal\authenticated_cache_warmer\Service\CacheWarmer
     arguments: ['@http_client', '@state']
-  authenticated_cache_warmer.cache_warmer_setup:
-    class: \Drupal\authenticated_cache_warmer\EventSubscriber\CacheWarmerSetup
-    arguments: ['@account_switcher', '@current_user', '@entity_type.manager']
-    tags:
-      - { name: 'event_subscriber' }

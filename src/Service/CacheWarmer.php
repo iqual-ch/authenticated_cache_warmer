@@ -189,8 +189,6 @@ class CacheWarmer {
     try {
       $url->setAbsolute(TRUE);
       $cookies = [];
-      $cookies['auth_cache_warmer_uid'] = $url->getAccountId();
-      $cookies['auth_cache_warmer_id'] = $this->sessionId;
       foreach ($url->getCookies() as $name => $value) {
         $cookies[$name] = $value;
       }
@@ -201,14 +199,9 @@ class CacheWarmer {
         'cookies' => $cookieJar,
       ];
       $options = array_merge($options, $url->getHttpOptions());
-      // Here we use POST request to bypass the page cache and hit the dynamic page cache.
-      // Else the first request on an url will be cached and the following requests
-      // on the same url but with different cookie values will be served from the cache.
-      // NB: This is a workaround and works only if you have one context only for anonymous users.
-      // A better solution would be to use a custom cache request policy for the page cache middleware.
-      // @see https://git.drupalcode.org/project/drupal/-/blob/11.x/core/lib/Drupal/Core/PageCache/DefaultRequestPolicy.php
+
       $promise = $this->httpClient->requestAsync(
-        'POST',
+        'GET',
         $url->toString(FALSE),
         $options
         );
